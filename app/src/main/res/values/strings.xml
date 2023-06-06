@@ -6,6 +6,11 @@
     <string name="description3_welcome">students and their performances</string>
     <string name="start_welcome">Get Started</string>
     <string name="courses">Courses</string>
+    <string name="students">Students</string>
+    <string name="studying">Studying</string>
+    <string name="finished">Finished</string>
+    <string name="year">Year</string>
+    <string name="subtitle">Subtitle:</string>
     <string name="copyright">Copyright © 2023 | Gustavo Souza</string>
     <string name="performance">Performance</string>
 </resources>

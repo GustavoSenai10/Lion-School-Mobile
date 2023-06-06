@@ -211,7 +211,9 @@ fun homeScreen(){
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            Row() {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
                                 AsyncImage(
                                     model = it.icone,
                                     contentDescription = "Curso Icone",
@@ -228,6 +230,11 @@ fun homeScreen(){
 
                                     Text(
                                         text = it.nome,
+                                        color = colorResource(id = R.color.white),
+                                        modifier = Modifier.padding(start = 20.dp)
+                                    )
+                                    Text(
+                                        text = it.carga,
                                         color = colorResource(id = R.color.white),
                                         modifier = Modifier.padding(start = 20.dp)
                                     )
