@@ -80,7 +80,7 @@ class HomeActivity : ComponentActivity() {
 fun homeScreen(){
 
 
-    //
+    //variavel de contexto
     val context = LocalContext.current
 
     //Fontes
