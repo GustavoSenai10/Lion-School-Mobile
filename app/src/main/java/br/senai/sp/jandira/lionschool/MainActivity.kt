@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.lionschool
 
 
+import android.content.Intent
 import br.senai.sp.jandira.lionschool.R
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -25,11 +26,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -43,31 +49,33 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.senai.sp.jandira.lionschool.ui.theme.LionSchoolTheme
 import kotlinx.coroutines.delay
+import okhttp3.internal.wait
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            home()
+            hallScreen()
         }
     }
 }
 @Preview
 @Composable
-fun home(){
+fun hallScreen(){
     val navController = rememberNavController()
+    var context = LocalContext.current
     var fontFamily = FontFamily(
         Font(R.font.grenze_regular),
         Font(R.font.roboto_medium)
     )
     NavHost(
         navController = navController ,
-        startDestination = "Home"
+        startDestination = "Hall"
     ){
-        composable("Home"){
+        composable("Hall"){
             SplashScreen(navController = navController)
         }
-        composable("home_screen"){
+        composable("hallScreen"){
             Surface(
                 modifier = Modifier.
                 fillMaxSize(),
@@ -97,18 +105,18 @@ fun home(){
                     Spacer(modifier = Modifier.height(15.dp))
                     Text(
                         text = stringResource(id = R.string.description1_welcome),
-                        fontFamily=fontFamily,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = Color.White
                     )
                     Text(
                         text = stringResource(id = R.string.description2_welcome),
-                        fontFamily=fontFamily,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = Color.White
                     )
                     Text(
                         text = stringResource(id = R.string.description3_welcome),
-                        fontFamily=fontFamily,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = Color.White
                     )
                     Spacer(modifier = Modifier.height(110.dp))
 
@@ -121,7 +129,12 @@ fun home(){
                     ) {
                         Button(
 
-                            onClick = { /*TODO*/ },
+                            onClick = {
+
+                                val openHomeActivity = Intent(context, HomeActivity::class.java)
+
+                                context.startActivity(openHomeActivity)
+                                      },
                             shape = RoundedCornerShape(16.dp),
 
                             ) {
@@ -140,6 +153,10 @@ fun home(){
 }
 @Composable
 fun SplashScreen(navController: NavController){
+
+    val offset = Offset(5.0f, 10.0f)
+
+
     val fontFamily = FontFamily(
         Font(R.font.grenze_regular),
         Font(R.font.roboto_medium)
@@ -150,7 +167,7 @@ fun SplashScreen(navController: NavController){
 
     ){
         delay(3000)
-        navController.navigate("home_screen")
+        navController.navigate("hallScreen")
 
     }
     Column(
@@ -163,7 +180,18 @@ fun SplashScreen(navController: NavController){
         ) {
         Text(
             text = stringResource(id = R.string.app_name),
-            fontFamily = fontFamily
+            fontFamily = fontFamily,
+            color = Color.White,
+            style = TextStyle(
+                fontSize = 24.sp,
+                shadow = Shadow(
+                color = Color.Black,
+                offset = offset,
+                blurRadius = 3f
+            )
+        )
+
+
 
         )
     }

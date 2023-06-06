@@ -1,8 +1,11 @@
 <resources>
-    <string name="app_name">LionSchool</string>
+    <string name="app_name">Lion School</string>
     <string name="welcome">Welcome to Lion School</string>
     <string name="description1_welcome">Welcome to the Lion School Courses platform Where</string>
     <string name="description2_welcome">you can find courses, </string>
     <string name="description3_welcome">students and their performances</string>
     <string name="start_welcome">Get Started</string>
+    <string name="courses">Courses</string>
+    <string name="copyright">Copyright © 2023 | Gustavo Souza</string>
+    <string name="performance">Performance</string>
 </resources>
