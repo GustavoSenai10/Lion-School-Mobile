@@ -14,13 +14,19 @@ interface StudentsService {
 
     @GET("alunos/")
     fun getStudentsPerCoursesAndStatus(
-        @Query("cursos") curso: String,
+        @Query("cursos") cursos: String,
         @Query("status") status: String
+    ): Call<StudentsList>
+
+    @GET("alunos/")
+    fun getStudentsPerCourses(
+        @Query("cursos") cursos: String
     ): Call<StudentsList>
 
     @GET("aluno/{matricula}")
     fun getStudentsPerRegistration(
         @Path("matricula") matricula:String
     ): Call<Students>
+
 
 }

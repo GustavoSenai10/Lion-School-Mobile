@@ -1,6 +1,8 @@
 package br.senai.sp.jandira.lionschool
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract.Colors
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,16 +23,23 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,6 +48,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.senai.sp.jandira.lionschool.model.Students
 import br.senai.sp.jandira.lionschool.model.StudentsList
 import br.senai.sp.jandira.lionschool.service.RetrofitFactory
 import coil.compose.AsyncImage
@@ -57,6 +67,7 @@ class Students : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun studentsScreen(siglaCurso:String){
@@ -66,11 +77,16 @@ fun studentsScreen(siglaCurso:String){
         Font(R.font.grenze_regular),
         Font(R.font.roboto_medium)
     )
-    var listStudents = remember{
-        mutableStateListOf<br.senai.sp.jandira.lionschool.model.Students>()
+    //variavel de contexto
+
+    val context = LocalContext.current
+
+    //Variaveis
+    var listStudents by remember{
+        mutableStateOf(listOf<Students>())
     }
 
-    var call = RetrofitFactory().getStudentsService().getStudentsPerCoursesAndStatus(curso = "DS", status = "Cursando" )
+    var call = RetrofitFactory().getStudentsService().getStudentsPerCourses(cursos = siglaCurso)
 
     call.enqueue(object : Callback<StudentsList> {
         override fun onResponse(
@@ -90,18 +106,22 @@ fun studentsScreen(siglaCurso:String){
 
     Surface(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize() ,
+
     ) {
         Column(
             modifier = Modifier.padding(15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+
         ) {
             Row(
                 modifier = Modifier.width(1000.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.logo_image),
+                    painter = painterResource(
+                        id = R.drawable.logo_image
+                    ),
                     contentDescription = "Logo do lion School",
                     modifier = Modifier.size(width = 50.dp, height = 60.dp)
                 )
@@ -178,37 +198,50 @@ fun studentsScreen(siglaCurso:String){
                         fontWeight = FontWeight(weight = 400)
                     )
                 }
+
+
                 
             }
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(30.dp)
+                    .fillMaxWidth(),
             ) {
                 items(listStudents) {
                     Spacer(modifier = Modifier.size(20.dp))
                     Card(
+                        onClick = {
+                            var openPerformace = Intent(context, PerformanceStudents::class.java)
+
+                            openPerformace.putExtra("matricula", it.matricula)
+                            context.startActivity(openPerformace)
+                        },
+
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp),
-                        shape = RoundedCornerShape(16.dp)
+                            .height(100.dp)
+                            .width(600.dp)
                     ) {
-                        Row(modifier = Modifier.padding(10.dp)) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color = colorResource(id = R.color.primary_color)),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
                             AsyncImage(
                                 model = it.foto,
                                 contentDescription = "Foto do Aluno",
                                 modifier = Modifier
-                                    .size(80.dp)
+                                    .size(70.dp)
                             )
                             Spacer(modifier = Modifier.width(10.dp))
-                            Column() {
+
                                 Text(
                                     text = it.nome,
-                                    fontSize = 35.sp,
-                                    color = Color.Black,
+                                    fontSize = 25.sp,
+
+                                    color = Color.White,
                                     fontWeight = FontWeight.Bold,
                                 )
-                            }
                         }
                     }
                 }
