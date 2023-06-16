@@ -34,9 +34,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
@@ -90,12 +92,12 @@ fun homeScreen(){
     )
     //Vairavel de estados
 
-    val texState = remember{
+    var texState by remember{
         mutableStateOf("")
     }
 
-    var listCursos = remember{
-        mutableStateListOf<br.senai.sp.jandira.lionschool.model.Curso>()
+    var listCursos by remember{
+        mutableStateOf(listOf<br.senai.sp.jandira.lionschool.model.Curso>())
     }
 
     var call = RetrofitFactory().getCourseService().getCursos()
@@ -105,15 +107,26 @@ fun homeScreen(){
             call: Call<CursoList>,
             response: Response<CursoList>
         ) {
-            listCursos = response.body()!!.cursos.toMutableStateList()
+            listCursos = response.body()!!.cursos
         }
 
         override fun onFailure(call: Call<CursoList>, t: Throwable) {
             Log.i("ds2t", "onFailure: ${t.message}")
         }
-    }
-    )
+    })
+    var  listaCards = listCursos
 
+    fun  filterByName (name: String){
+         var  newList = listCursos.filter {
+             val regex = Regex(name, RegexOption.IGNORE_CASE)
+             it.nome.contains(regex)
+         }
+        if (!listaCards.isEmpty()){
+            listaCards= newList
+        }else if(name == ""){
+            listaCards =listCursos
+        }
+    }
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -170,10 +183,12 @@ fun homeScreen(){
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 OutlinedTextField(
-                    value = texState.value,
+                    value = texState,
                     onValueChange = {
 
-                        texState.value = it
+                        texState = it
+
+                        filterByName(it)
                     },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
@@ -197,6 +212,7 @@ fun homeScreen(){
                             var openStudents = Intent(context, Students::class.java)
 
                             openStudents.putExtra("sigla", it.sigla)
+                            openStudents.putExtra("name", it.nome)
                             context.startActivity(openStudents)
                         },
                         modifier = Modifier

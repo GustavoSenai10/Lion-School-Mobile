@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.senai.sp.jandira.lionschool.model.Curso
 import br.senai.sp.jandira.lionschool.model.Students
 import br.senai.sp.jandira.lionschool.model.StudentsList
 import br.senai.sp.jandira.lionschool.service.RetrofitFactory
@@ -61,8 +62,9 @@ class Students : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            var siglaCurso = intent.getStringExtra("sigla")?: ""
-            studentsScreen(siglaCurso.toString())
+            var siglaCurso = intent.getStringExtra("sigla")
+            val nomeCurso  = intent.getStringExtra("nome")
+            studentsScreen(siglaCurso.toString(),nomeCurso.toString())
         }
     }
 }
@@ -70,7 +72,7 @@ class Students : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun studentsScreen(siglaCurso:String){
+fun studentsScreen(siglaCurso:String,nomneCurso: String){
 
     //Fontes
     val fontFamily = FontFamily(
