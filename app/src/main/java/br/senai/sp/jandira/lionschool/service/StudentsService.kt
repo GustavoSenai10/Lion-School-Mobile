@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.lionschool.service
 
+import br.senai.sp.jandira.lionschool.model.StudentPerformance
 import br.senai.sp.jandira.lionschool.model.Students
 import br.senai.sp.jandira.lionschool.model.StudentsList
 import retrofit2.Call
@@ -23,10 +24,8 @@ interface StudentsService {
         @Query("cursos") cursos: String
     ): Call<StudentsList>
 
-    @GET("aluno/{matricula}")
-    fun getStudentsPerRegistration(
-        @Path("matricula") matricula:String
-    ): Call<Students>
+    @GET("alunos/{matricula}")
+    fun getAlunosByMatricula(@Path("matricula") matricula: String): Call<StudentPerformance>
 
 
 }

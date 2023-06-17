@@ -239,7 +239,7 @@ fun studentsScreen(siglaCurso:String,nomneCurso: String){
 
                                 Text(
                                     text = it.nome,
-                                    fontSize = 25.sp,
+                                    fontSize = 20.sp,
 
                                     color = Color.White,
                                     fontWeight = FontWeight.Bold,
